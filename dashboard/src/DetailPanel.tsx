@@ -1,5 +1,5 @@
 import type { AttackResult } from "./types";
-import { verdictsDisagree } from "./types";
+import { formatCategory, verdictsDisagree } from "./types";
 
 interface DetailPanelProps {
   result: AttackResult | null;
@@ -31,7 +31,10 @@ export default function DetailPanel({ result }: DetailPanelProps) {
   return (
     <div className="detail-panel">
       <header className="detail-header">
-        <span className="detail-category">{result.category}</span>
+        <span className="detail-category">
+          {formatCategory(result.category)} &middot; {Math.ceil(result.transcript.length / 2)}{" "}
+          {result.transcript.length === 2 ? "turn" : "turns"}
+        </span>
         <h2>{result.id}</h2>
         <p className="detail-description">{result.description}</p>
       </header>

@@ -1,5 +1,5 @@
 import type { AttackResult } from "./types";
-import { verdictsDisagree } from "./types";
+import { formatCategory, verdictsDisagree } from "./types";
 
 interface AttackListProps {
   results: AttackResult[];
@@ -36,7 +36,7 @@ export default function AttackList({ results, selectedId, onSelect }: AttackList
     <nav className="attack-list" aria-label="Attacks">
       {categories.map((category) => (
         <div key={category} className="attack-list-group">
-          <h3 className="attack-list-group-title">{category}</h3>
+          <h3 className="attack-list-group-title">{formatCategory(category)}</h3>
           <ul>
             {byCategory.get(category)!.map((r) => (
               <li key={r.id}>

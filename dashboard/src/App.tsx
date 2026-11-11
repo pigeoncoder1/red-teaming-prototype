@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import AttackList from "./AttackList";
 import DetailPanel from "./DetailPanel";
 import type { AttackResult } from "./types";
+import { formatCategory } from "./types";
 import "./App.css";
 
 export default function App() {
@@ -56,6 +57,21 @@ export default function App() {
     };
   }, [results]);
 
+  // Up/Down arrow keys step through attacks without reaching for the mouse.
+  useEffect(() => {
+    if (!results || results.length === 0) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      e.preventDefault();
+      const idx = results.findIndex((r) => r.id === selectedId);
+      const step = e.key === "ArrowDown" ? 1 : -1;
+      const next = Math.min(Math.max(idx + step, 0), results.length - 1);
+      setSelectedId(results[next].id);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [results, selectedId]);
+
   const selectedResult = results?.find((r) => r.id === selectedId) ?? null;
 
   if (loadError) {
@@ -89,7 +105,7 @@ export default function App() {
         <div className="summary-breakdown">
           {summary.categories.map((c) => (
             <span key={c.category} className="summary-breakdown-item">
-              {c.category}: {c.defended}/{c.judged} defended
+              {formatCategory(c.category)}: {c.defended}/{c.judged} defended
             </span>
           ))}
         </div>

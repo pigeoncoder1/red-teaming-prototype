@@ -33,3 +33,10 @@ export function verdictsDisagree(r: AttackResult): boolean {
     r.llm_verdict !== "ERROR"
   );
 }
+
+/** "authority_impersonation" -> "Authority impersonation" (ASR stays uppercase). */
+export function formatCategory(category: string): string {
+  const words = category.split("_").map((w) => (w === "asr" ? "ASR" : w));
+  const text = words.join(" ");
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
